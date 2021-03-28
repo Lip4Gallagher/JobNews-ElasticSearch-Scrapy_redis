@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from elasticsearch_dsl import Nested,Date,Boolean,analyzer,Completion,Text,Keyword,Integer,InnerDoc,Document,connections
+from elasticsearch_dsl import Nested, Text, Integer, InnerDoc, Document, connections
 
 # 新建连接
 connections.create_connection(hosts=['localhost'])
@@ -10,12 +10,13 @@ class Kind(InnerDoc):
     kind1 = Text()
     kind2 = Text()
 
+
 class Salary(InnerDoc):
     max = Text()
     min = Text()
 
-class JobNewsType(Document):
 
+class JobNewsType(Document):
     job = Text(analyzer="ik_max_word")
     publishdate = Text()
 
@@ -39,6 +40,7 @@ class JobNewsType(Document):
     def add_salary(self, one, two):
         self.salary.append(
             Salary(max=one, min=two))
+
 
 if __name__ == '__main__':
     JobNewsType.init(index="jobnews")

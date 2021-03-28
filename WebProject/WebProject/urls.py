@@ -17,12 +17,12 @@ from django.contrib import admin
 from django.conf.urls import url
 from django.urls import path
 from SearchEngine import views
-# from SearchEngine import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.search),
-    url('search/',views.search),
-    url('result/',views.result),
-    url('show/',views.show),
+    url('search/', views.search),
+    url('result/', views.result),
+    url('show/', views.show),
 ]

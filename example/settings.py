@@ -8,7 +8,7 @@
 SPIDER_MODULES = ['example.spiders']
 NEWSPIDER_MODULE = 'example.spiders'
 
-USER_AGENT = 'scrapy-redis (+https://github.com/rolando/scrapy-redis)'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36'
 
 # Redis config
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
@@ -25,9 +25,9 @@ REDIS_PORT = 6379
 
 # Pipelines config
 ITEM_PIPELINES = {
-    'example.pipelines.ElasticSearchPipeline':300,
-    'example.pipelines.JsonWriterPipeline': 400,
-    # 'scrapy_redis.pipelines.RedisPipeline': 500,
+    'scrapy_redis.pipelines.RedisPipeline': 300,
+    # 'example.pipelines.JsonWriterPipeline': 400,
+    'example.pipelines.ElasticSearchPipeline': 500
 }
 
 # ElasticSearch config
@@ -45,4 +45,5 @@ LOG_LEVEL = 'DEBUG'
 
 # Introduce an artifical delay to make use of parallelism. to speed up the
 # crawl.
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 0.05
+CONCURRENT_REQUESTS = 800

@@ -3,7 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 
 from scrapy_redis.spiders import RedisCrawlSpider
 
-from items import JobNewsItem
+from ..items import JobNewsItem
 
 
 class MyCrawler(RedisCrawlSpider):
@@ -13,10 +13,9 @@ class MyCrawler(RedisCrawlSpider):
 
     rules = [
         # Rule(LinkExtractor(allow='http://www.job5156.com/index/zhaopin_(php|java|c|net|zwpython|Android|zwrjgcs)'),follow=True),
-        Rule(LinkExtractor(allow='http://www.job5156.com/index/zhaopin_[\S]+'),follow=True),
-        Rule(LinkExtractor(allow=r'http://www.job5156.com/[\S]+\/job_[0-9]+'), callback='parse_page', follow=False),
+        Rule(LinkExtractor(allow='https://www.job5156.com/index/zhaopin_[\S]+'), follow=True),
+        Rule(LinkExtractor(allow=r'https://www.job5156.com/[\S]+\/job_[0-9]+'), callback='parse_page', follow=False),
     ]
-
 
     '''
         # 这是个坑，spider-redis官方给的代码，domain相当于最小的范围
@@ -25,18 +24,18 @@ class MyCrawler(RedisCrawlSpider):
         # domain = kwargs.pop('www.job5156.com', '')
         # self.allowed_domains = filter(None, domain.split(','))
     '''
+
     def __init__(self, *args, **kwargs):
         self.allowed_domains = ['www.job5156.com']
         super(MyCrawler, self).__init__(*args, **kwargs)
 
     def parse_page(self, response):
-
         try:
             job = response.xpath('/html/body/div[2]/div/div/div/div[1]/h1/text()').get()
         except RuntimeError:
             job = None
 
-
+        salary_max = salary_min = 0
         try:
             salary = response.xpath('/html/body/div[2]/div/div/div/div[1]/span/text()').getall()
             salary_min = float(salary[0].split('/')[0].split('-')[0])
@@ -53,7 +52,7 @@ class MyCrawler(RedisCrawlSpider):
         try:
             xueli = response.xpath('/html/body/div[2]/div/div/div/div[2]/ul/li[1]/p/text()').get()
         except RuntimeError:
-            xueli = -10 # 表示异常数据
+            xueli = -10  # 表示异常数据
 
         try:
             experience = response.xpath('/html/body/div[2]/div/div/div/div[2]/ul/li[2]/p/text()').get()
@@ -91,17 +90,17 @@ class MyCrawler(RedisCrawlSpider):
             kind_max = None
             kind_min = None
         data = {
-            "job":job,
-            "salary":salary,
-            "xueli":xueli,
-            "experience":experience,
-            "zone":zone,
-            "date":date,
-            "description":description,
+            "job": job,
+            "salary": salary,
+            "xueli": xueli,
+            "experience": experience,
+            "zone": zone,
+            "date": date,
+            "description": description,
             # "location":location, # 暂时允许为空
-            "company":company,
-            "logo":logo,
-            "kind_max":kind_max,
+            "company": company,
+            "logo": logo,
+            "kind_max": kind_max,
             "kind_min": kind_min,
         }
         # 如果有空值，则返回空item
@@ -159,7 +158,7 @@ class MyCrawler(RedisCrawlSpider):
         item['kind_min'] = kind_min
         yield item
 
-    def isValid(self,data):
+    def isValid(self, data):
         for x in data:
             if data.get(x) is None:
                 return False
