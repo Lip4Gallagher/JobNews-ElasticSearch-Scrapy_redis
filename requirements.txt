@@ -1,4 +1,5 @@
+Django==3.1.7
 elasticsearch==7.12.0
 elasticsearch_dsl==7.3.0
+Scrapy==2.4.1
 scrapy-redis==0.7.1
-Django==3.1.7

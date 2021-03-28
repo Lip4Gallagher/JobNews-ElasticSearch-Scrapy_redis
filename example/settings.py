@@ -18,6 +18,7 @@ SCHEDULER_PERSIST = True
 # REDIS_START_URLS_AS_SET = True # 加这个参数报错  WRONGTYPE Operation against a key holding the wrong kind of value
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
+REDIS_URL = 'redis://:Mjolnir@127.0.0.1:6379'
 
 #SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderPriorityQueue"
 #SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderQueue"

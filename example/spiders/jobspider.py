@@ -12,9 +12,8 @@ class MyCrawler(RedisCrawlSpider):
     redis_key = 'jobnews:start_urls'
 
     rules = [
-        # Rule(LinkExtractor(allow='http://www.job5156.com/index/zhaopin_(php|java|c|net|zwpython|Android|zwrjgcs)'),follow=True),
-        Rule(LinkExtractor(allow='https://www.job5156.com/index/zhaopin_[\S]+'), follow=True),
-        Rule(LinkExtractor(allow=r'https://www.job5156.com/[\S]+\/job_[0-9]+'), callback='parse_page', follow=False),
+        Rule(LinkExtractor(allow=r'https://www.job5156.com/index/zhaopin_[\S]+'), follow=True),
+        Rule(LinkExtractor(allow=r'https://www.job5156.com/[\S]+\/job_[0-9]+'), callback='parse_job_info', follow=False)
     ]
 
     '''
@@ -29,7 +28,7 @@ class MyCrawler(RedisCrawlSpider):
         self.allowed_domains = ['www.job5156.com']
         super(MyCrawler, self).__init__(*args, **kwargs)
 
-    def parse_page(self, response):
+    def parse_job_info(self, response):
         try:
             job = response.xpath('/html/body/div[2]/div/div/div/div[1]/h1/text()').get()
         except RuntimeError:
@@ -104,7 +103,7 @@ class MyCrawler(RedisCrawlSpider):
             "kind_min": kind_min,
         }
         # 如果有空值，则返回空item
-        if not self.isValid(data):
+        if not self.is_valid(data):
             return None
 
         #  学历 进行从1到8编码
@@ -158,7 +157,8 @@ class MyCrawler(RedisCrawlSpider):
         item['kind_min'] = kind_min
         yield item
 
-    def isValid(self, data):
+    @staticmethod
+    def is_valid(data):
         for x in data:
             if data.get(x) is None:
                 return False

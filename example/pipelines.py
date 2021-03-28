@@ -41,7 +41,7 @@ class ElasticSearchPipeline(object):
         customer.company = item['company']
         customer.location = item['location']
         customer.logo = item['logo']
-        customer.add_kind(item['kind_max'],item['kind_min'])
+        customer.add_kind(item['kind_max'], item['kind_min'])
         # customer.Kind().kind1 = item['kind_max']
         # customer.Kind().kind2 = item['kind_min']
 
